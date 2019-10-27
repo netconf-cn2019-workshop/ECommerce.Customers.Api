@@ -31,7 +31,7 @@ namespace ECommerce.Customers.Api.Controllers
         [HttpGet]
         public IEnumerable<Customer> Get()
         {
-            _logger.LogDebug("Returning all customers");
+            _logger.LogDebug("返回所有顾客信息");
             return _customerRepository.GetAll();
         }
 
@@ -41,7 +41,7 @@ namespace ECommerce.Customers.Api.Controllers
         {
             var correlationId = _correlationContextAccessor.CorrelationContext.CorrelationId;
 
-            _logger.LogDebug($"Returning customer with id '{id}'");
+            _logger.LogDebug($"返回 Id 为'{id}' 的顾客信息");
 
             return _customerRepository.GetByID(id);
         }
