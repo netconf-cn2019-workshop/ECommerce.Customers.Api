@@ -7,7 +7,6 @@ kind: Service
 apiVersion: v1
 metadata:
   name: customers-api
-  namespace: ecommerce
   labels:
     app: customers-api
     tier: backend
@@ -25,13 +24,15 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: customers-api
-  namespace: ecommerce
+  labels:
+    app: customers-api
+    tier: backend
 spec:
   selector:
     matchLabels:
       app: customers-api
       tier: backend
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
@@ -40,8 +41,8 @@ spec:
     spec:
       containers:
       - name: customers-api
-        image: $$REGISTRY_SERVERcatalog-api:$$IMAGE_VERSION
-        imagePullPolicy: $$IMAGE_PULL_POLICY
+        image: $$REGISTRY_SERVERcustomers-api:$$IMAGE_VERSION
+        imagePullPolicy: IfNotPresent
         ports:
           - containerPort: 80
         env:
@@ -61,5 +62,3 @@ spec:
             port: 80
           initialDelaySeconds: 3
           periodSeconds: 3
-      imagePullSecrets:
-      - name: registrysecret
