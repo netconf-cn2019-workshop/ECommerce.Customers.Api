@@ -1,0 +1,65 @@
+
+---
+#
+# Customers Microservice Deployment + Service
+#
+kind: Service
+apiVersion: v1
+metadata:
+  name: customers-api
+  namespace: ecommerce
+  labels:
+    app: customers-api
+    tier: backend
+spec:
+  selector:
+    app: customers-api
+    tier: backend
+  ports:
+    - name: customers-api
+      protocol: TCP
+      port: 8082
+      targetPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customers-api
+  namespace: ecommerce
+spec:
+  selector:
+    matchLabels:
+      app: customers-api
+      tier: backend
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: customers-api
+        tier: backend
+    spec:
+      containers:
+      - name: customers-api
+        image: $$REGISTRY_SERVERcatalog-api:$$IMAGE_VERSION
+        imagePullPolicy: $$IMAGE_PULL_POLICY
+        ports:
+          - containerPort: 80
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "$$ENVIRONMENT_NAME"
+        - name: ASPNETCORE_ORCHESTRATOR
+          value: "k8s"
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: 80
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 80
+          initialDelaySeconds: 3
+          periodSeconds: 3
+      imagePullSecrets:
+      - name: registrysecret
