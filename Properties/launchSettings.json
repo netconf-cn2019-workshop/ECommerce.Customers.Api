@@ -8,14 +8,6 @@
     }
   },
   "profiles": {
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "launchUrl": "api/customers",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
     "ECommerce.Customers.Api": {
       "commandName": "Project",
       "launchBrowser": true,
@@ -23,7 +15,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:4999/"
+      "applicationUrl": "http://localhost:4002/"
     }
   }
 }

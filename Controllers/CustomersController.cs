@@ -18,7 +18,7 @@ namespace ECommerce.Customers.Api.Controllers
         private readonly ILogger<CustomersController> _logger;
 
         public CustomersController(
-            ICustomerRepository customerRepository, 
+            ICustomerRepository customerRepository,
             ICorrelationContextAccessor correlationContextAccessor,
             ILogger<CustomersController> logger)
         {
@@ -33,6 +33,14 @@ namespace ECommerce.Customers.Api.Controllers
         {
             _logger.LogDebug("返回所有顾客信息");
             return _customerRepository.GetAll();
+        }
+
+        [Route("Search")]
+        [HttpPost]
+        public IEnumerable<Customer> Get([FromBody]Customer query)
+        {
+            _logger.LogDebug("查询顾客信息");
+            return _customerRepository.GetAll(query);
         }
 
         // GET api/customers/5

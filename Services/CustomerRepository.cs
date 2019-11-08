@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 using Dapper;
 using ECommerce.Customers.Api.Model;
 
@@ -29,8 +30,8 @@ namespace ECommerce.Customers.Api.Services
         {
             using (IDbConnection dbConnection = Connection)
             {
-                string sQuery = "INSERT INTO Customers (FirstName, LastName)"
-                    + " VALUES(@FirstName, @LastName)";
+                string sQuery = "INSERT INTO Customers (FirstName, LastName, UserName, Password)"
+                    + " VALUES(@FirstName, @LastName, @UserName, @Password)";
                 dbConnection.Open();
                 dbConnection.Execute(sQuery, prod);
             }
@@ -42,6 +43,23 @@ namespace ECommerce.Customers.Api.Services
             {
                 dbConnection.Open();
                 return dbConnection.Query<Customer>("SELECT * FROM Customers");
+            }
+        }
+
+        public IEnumerable<Customer> GetAll(Customer query)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                dbConnection.Open();
+
+                var sql = new StringBuilder("SELECT * FROM Customers WHERE 1=1 ");
+
+                if (!string.IsNullOrEmpty(query.UserName))
+                {
+                    sql.AppendFormat(" and UserName=@UserName ");
+                }
+
+                return dbConnection.Query<Customer>(sql.ToString(), new { UserName = query.UserName  });
             }
         }
 

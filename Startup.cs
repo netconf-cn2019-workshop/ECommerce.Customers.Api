@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace ECommerce.Customers.Api
 {
@@ -27,6 +28,10 @@ namespace ECommerce.Customers.Api
             services.AddCorrelationId();
             services.AddMvc();
             services.AddScoped<ICustomerRepository>(c => new CustomerRepository(Configuration["ConnectionStrings:CustomersDb"]));
+
+            services.AddSwaggerGen(c => {
+                c.SwaggerDoc("v1", new Info { Title = "Customer API", Version = "V1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +58,11 @@ namespace ECommerce.Customers.Api
             });
 
             app.UseMvc();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "post API V1");
+            });
         }
     }
 }

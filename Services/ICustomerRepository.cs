@@ -10,6 +10,8 @@ namespace ECommerce.Customers.Api.Services
 
         IEnumerable<Customer> GetAll();
 
+        IEnumerable<Customer> GetAll(Customer query);
+
         Customer GetByID(int id);
 
         void Delete(int id);
